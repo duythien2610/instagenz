@@ -33,6 +33,14 @@ elseif(isset($_GET['verify_email'])){
     $page = 'verify_email';
     $page_title = 'Xác thực tài khoản';
 }
+elseif(isset($_SESSION['Auth']) && isset($_GET['u'])){
+    $page = 'profile';
+    $page_title = 'Trang cá nhân';
+}
+elseif (isset($_SESSION['Auth']) && isset($_GET['message'])) {
+    $page = 'message';  
+    $page_title = 'Tin nhắn';
+}
 elseif(isset($_SESSION['Auth']) && isset($_GET['editprofile'])){
     $page = 'edit_profile';
     $page_title = 'Chỉnh sửa hồ sơ';
@@ -41,11 +49,6 @@ elseif(isset($_SESSION['Auth']) && isset($_GET['search'])){
     $page = 'search';
     $page_title = 'Kết quả tìm kiếm';
 }
-elseif(isset($_SESSION['Auth']) && isset($_GET['u'])){
-    $page = 'profile';
-    $page_title = 'Trang cá nhân';
-}
-// ------------------------------
 elseif(isset($_GET['forgotpassword'])){
     $page = 'forgot_password';
     $page_title = 'Quên mật khẩu';

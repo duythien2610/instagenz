@@ -1,0 +1,1669 @@
+/* --- 1. GLOBAL SETTINGS & FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #fafafa !important; /* Màu nền xám nhẹ dịu mắt */
+    color: #262626 !important;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode Styles - Phải có !important để override */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .card {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #333;
+}
+
+body.dark-mode .navbar {
+    background-color: rgba(30, 30, 30, 0.95) !important;
+    border-color: #333;
+}
+
+body.dark-mode .nav-link {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .nav-link:hover {
+    background-color: #2a2a2a;
+    color: #0d6efd !important;
+}
+
+body.dark-mode .form-control {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .form-control:focus {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #0d6efd;
+}
+
+body.dark-mode input[type="search"] {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode input[type="search"]:focus {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-menu {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+body.dark-mode .dropdown-item {
+    color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .bg-light {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .text-muted {
+    color: #aaa !important;
+}
+
+body.dark-mode .text-dark {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .border {
+    border-color: #333 !important;
+}
+
+body.dark-mode .comment-list {
+    background-color: #1a1a1a;
+}
+
+body.dark-mode .comment-item {
+    border-bottom-color: #333;
+}
+
+body.dark-mode .modal-content {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: #333;
+}
+
+body.dark-mode .btn-close {
+    filter: invert(1);
+}
+
+body.dark-mode .theme-toggle {
+    color: #ffc107 !important;
+}
+
+/* Theme Toggle Item trong Dropdown */
+.theme-toggle-item {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.theme-toggle-item:hover {
+    background-color: #f0f2f5 !important;
+}
+
+body.dark-mode .theme-toggle-item:hover {
+    background-color: #2a2a2a !important;
+}
+
+.theme-toggle-item i {
+    margin-right: 8px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle-item:hover i {
+    transform: rotate(15deg);
+}
+
+/* Additional Dark Mode Styles */
+body.dark-mode .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+body.dark-mode .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+body.dark-mode .card-header {
+    background-color: #252525 !important;
+    border-bottom-color: #333 !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .card-body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .comment-input {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .comment-input:focus {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #0d6efd;
+}
+
+body.dark-mode .reply-container-popup-0,
+body.dark-mode [class^="reply-container-popup-"],
+body.dark-mode [class*=" reply-container-popup-"] {
+    border-top-color: #333;
+}
+
+body.dark-mode .comment-replies-level-1 {
+    border-left-color: #0d6efd;
+}
+
+body.dark-mode .comment-replies-level-2 {
+    border-left-color: #6c757d;
+}
+
+body.dark-mode .comment-replies-level-3 {
+    border-left-color: #adb5bd;
+}
+
+body.dark-mode .comment-reply-wrapper.comment-level-1 {
+    background: linear-gradient(to right, #1a2332 0%, #1e1e1e 60%);
+    border-color: #1a4d8c;
+}
+
+body.dark-mode .comment-nested-reply.comment-level-2 {
+    background: linear-gradient(to right, #2a2a2a 0%, #1e1e1e 60%);
+    border-color: #444;
+}
+
+body.dark-mode .comment-nested-reply.comment-level-3 {
+    background: linear-gradient(to right, #252525 0%, #1e1e1e 60%);
+    border-color: #333;
+}
+
+body.dark-mode ::-webkit-scrollbar {
+    width: 8px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 10px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* === SIDEBAR DARK MODE === */
+body.dark-mode .col-4.mt-4.p-3 .card {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #333;
+}
+
+body.dark-mode .col-4.mt-4.p-3 .card-body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .followbtn {
+    color: #0d6efd !important;
+}
+
+body.dark-mode .followbtn:hover {
+    color: #0b5ed7 !important;
+}
+
+/* === PROFILE PAGE DARK MODE === */
+body.dark-mode .profile-wrapper {
+    background-color: transparent;
+}
+
+body.dark-mode .profile-header {
+    background-color: transparent !important;
+}
+
+body.dark-mode .profile-name {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .profile-avatar {
+    border-color: #444 !important;
+}
+
+body.dark-mode .btn-stat {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .gallery-item {
+    background-color: #1a1a1a;
+}
+
+body.dark-mode .gallery-overlay {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* === EDIT PROFILE DARK MODE === */
+body.dark-mode .edit-profile-card {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .form-floating > .form-control {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .form-floating > .form-control:focus {
+    background-color: #333;
+    color: #e0e0e0;
+    border-color: #0d6efd;
+}
+
+body.dark-mode .form-floating > label {
+    color: #aaa;
+}
+
+body.dark-mode .form-control:disabled,
+body.dark-mode .form-control[readonly] {
+    background-color: #252525 !important;
+    color: #888 !important;
+    border-color: #333 !important;
+}
+
+body.dark-mode .update-btn {
+    background-color: #0d6efd;
+}
+
+body.dark-mode .update-btn:hover {
+    background-color: #0b5ed7;
+}
+
+/* === MESSAGE PAGE DARK MODE === */
+body.dark-mode .msg-container {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
+}
+
+body.dark-mode .chat-sidebar {
+    background: #1e1e1e !important;
+    border-right-color: #333 !important;
+}
+
+body.dark-mode .sidebar-header {
+    background: #1e1e1e !important;
+    border-bottom-color: #333 !important;
+}
+
+body.dark-mode .search-box {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .search-box input {
+    background: transparent !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .user-item {
+    color: #e0e0e0 !important;
+    border-bottom-color: #2a2a2a !important;
+}
+
+body.dark-mode .user-item:hover {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .user-item.active {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .chat-area {
+    background: #1e1e1e !important;
+}
+
+body.dark-mode .chat-header {
+    background: #1e1e1e !important;
+    border-bottom-color: #333 !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .msg-body {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .bubble.incoming {
+    background: #2a2a2a !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .bubble.outgoing {
+    background: #0d6efd !important;
+    color: #fff !important;
+}
+
+body.dark-mode .chat-input-area {
+    background: #1e1e1e !important;
+    border-top-color: #333 !important;
+}
+
+body.dark-mode .custom-input {
+    background: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .custom-input:focus {
+    background: #333 !important;
+    color: #e0e0e0 !important;
+    border-color: #0d6efd !important;
+}
+
+/* === SEARCH PAGE DARK MODE === */
+body.dark-mode .container.mt-4 .card {
+    background-color: #1e1e1e;
+    border-color: #333;
+}
+
+body.dark-mode .container.mt-4 .card-body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .container.mt-4 h4 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .container.mt-4 .border-bottom {
+    border-bottom-color: #333 !important;
+}
+
+body.dark-mode .container.mt-4 .text-dark {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+body.dark-mode .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* === LOGIN/SIGNUP PAGE DARK MODE === */
+body.dark-mode .login-card,
+body.dark-mode .login-card-footer {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .title {
+    color: #aaa !important;
+}
+
+body.dark-mode .form-floating > .form-control {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .form-floating > .form-control:focus {
+    background-color: #333 !important;
+    color: #e0e0e0 !important;
+    border-color: #0d6efd !important;
+}
+
+body.dark-mode .link-secondary {
+    color: #0d6efd !important;
+}
+
+body.dark-mode .link-signup {
+    color: #0d6efd !important;
+}
+
+body.dark-mode .divider-text {
+    color: #aaa !important;
+}
+
+body.dark-mode .divider-text::before,
+body.dark-mode .divider-text::after {
+    border-bottom-color: #444 !important;
+}
+
+body.dark-mode .eye-toggle {
+    color: #aaa !important;
+}
+
+/* === ADMIN PAGE DARK MODE === */
+body.dark-mode .table {
+    color: #e0e0e0;
+}
+
+body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > td {
+    background-color: #252525;
+}
+
+body.dark-mode .table-hover > tbody > tr:hover > td {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .table thead th {
+    background-color: #1a1a1a;
+    border-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .table td,
+body.dark-mode .table th {
+    border-color: #333;
+}
+
+/* === ADDITIONAL COMPONENTS === */
+body.dark-mode .btn-outline-dark {
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode .btn-outline-dark:hover {
+    background-color: #555;
+    border-color: #555;
+    color: #fff;
+}
+
+body.dark-mode .badge {
+    border-color: #333 !important;
+}
+
+body.dark-mode .alert {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .alert-success {
+    background-color: #1e4620;
+    border-color: #2e7d32;
+    color: #a5d6a7;
+}
+
+body.dark-mode .alert-danger {
+    background-color: #4a1f1f;
+    border-color: #c62828;
+    color: #ef9a9a;
+}
+
+body.dark-mode .alert-warning {
+    background-color: #4a3f1f;
+    border-color: #f57c00;
+    color: #ffe082;
+}
+
+body.dark-mode .alert-info {
+    background-color: #1e3a4a;
+    border-color: #0277bd;
+    color: #90caf9;
+}
+
+/* === TEXT COLORS === */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode p {
+    color: #d0d0d0;
+}
+
+body.dark-mode small {
+    color: #aaa !important;
+}
+
+/* === LINKS === */
+body.dark-mode a {
+    color: #0d6efd;
+}
+
+body.dark-mode a:hover {
+    color: #0b5ed7;
+}
+
+body.dark-mode .text-primary {
+    color: #0d6efd !important;
+}
+
+/* === CONTAINER === */
+body.dark-mode .container {
+    background-color: transparent;
+}
+
+body.dark-mode .container-fluid {
+    background-color: transparent;
+}
+
+/* === CARD HEADER & BODY === */
+body.dark-mode .card-header {
+    background-color: #252525 !important;
+    border-bottom-color: #333 !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .card-body {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .card-footer {
+    background-color: #252525 !important;
+    border-top-color: #333 !important;
+    color: #e0e0e0 !important;
+}
+
+/* === BUTTONS === */
+body.dark-mode .btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+body.dark-mode .btn-outline-secondary {
+    border-color: #6c757d;
+    color: #aaa;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+}
+
+body.dark-mode .btn-outline-dark {
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode .btn-outline-dark:hover {
+    background-color: #555;
+    border-color: #555;
+    color: #fff;
+}
+
+body.dark-mode .btn-link {
+    color: #0d6efd;
+}
+
+body.dark-mode .btn-link:hover {
+    color: #0b5ed7;
+}
+
+/* === TEXTAREA === */
+body.dark-mode textarea {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode textarea:focus {
+    background-color: #333 !important;
+    color: #e0e0e0 !important;
+    border-color: #0d6efd !important;
+}
+
+/* === SELECT === */
+body.dark-mode select {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode select:focus {
+    background-color: #333 !important;
+    color: #e0e0e0 !important;
+    border-color: #0d6efd !important;
+}
+
+/* === HR (Divider) === */
+body.dark-mode hr {
+    border-color: #333 !important;
+    opacity: 1;
+}
+
+body.dark-mode .dropdown-divider {
+    border-top-color: #333 !important;
+}
+
+/* === SHADOW === */
+body.dark-mode .shadow,
+body.dark-mode .shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* === NAVBAR BRAND === */
+body.dark-mode .navbar-brand {
+    filter: brightness(0) invert(1);
+}
+
+/* === POST IMAGES === */
+body.dark-mode .card-img-top {
+    background-color: #1a1a1a;
+}
+
+/* === PROFILE PAGE SPECIFIC === */
+body.dark-mode .profile-stats {
+    border-top-color: #333 !important;
+}
+
+body.dark-mode .btn-outline-dark.w-100 {
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode .btn-outline-dark.w-100:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* === SEARCH RESULT === */
+body.dark-mode #search_result {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode #search_result a {
+    color: #e0e0e0;
+}
+
+body.dark-mode #search_result a:hover {
+    background-color: #2a2a2a !important;
+    color: #0d6efd;
+}
+
+/* === MODAL SPECIFIC === */
+body.dark-mode .modal-body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .modal-footer {
+    background-color: #1e1e1e;
+    border-top-color: #333;
+}
+
+body.dark-mode .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* === POST PREVIEW === */
+body.dark-mode #post_img_preview_container {
+    background-color: #1a1a1a;
+}
+
+/* === COLLAPSE === */
+body.dark-mode .collapse {
+    background-color: transparent;
+}
+
+/* === SPINNER === */
+body.dark-mode .spinner-border {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-right-color: #0d6efd;
+}
+
+/* === BREADCRUMB === */
+body.dark-mode .breadcrumb {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .breadcrumb-item.active {
+    color: #aaa;
+}
+
+/* === PAGINATION === */
+body.dark-mode .pagination .page-link {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .pagination .page-link:hover {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* === TOOLTIP === */
+body.dark-mode .tooltip-inner {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: #2a2a2a;
+}
+
+/* === POPOVER === */
+body.dark-mode .popover {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .popover-header {
+    background-color: #252525;
+    border-bottom-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .popover-body {
+    color: #e0e0e0;
+}
+
+/* === LOGIN/SIGNUP PAGE SPECIFIC === */
+body.dark-mode .login-container {
+    background-color: #121212;
+}
+
+body.dark-mode .login-card,
+body.dark-mode .login-card-footer {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .login-logo {
+    filter: brightness(0) invert(1);
+}
+
+body.dark-mode .title {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .form-floating > .form-control {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .form-floating > .form-control:focus {
+    background-color: #333 !important;
+    color: #e0e0e0 !important;
+    border-color: #0d6efd !important;
+}
+
+body.dark-mode .form-floating > label {
+    color: #aaa !important;
+}
+
+body.dark-mode .form-check-label {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .form-check-input {
+    background-color: #2a2a2a;
+    border-color: #555;
+}
+
+body.dark-mode .form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+body.dark-mode .btn-insta {
+    background-color: #0d6efd;
+}
+
+body.dark-mode .btn-insta:hover {
+    background-color: #0b5ed7;
+}
+
+body.dark-mode .border-top {
+    border-top-color: #333 !important;
+}
+
+/* === FORGOT PASSWORD PAGE === */
+body.dark-mode .main-container {
+    background-color: transparent;
+}
+
+body.dark-mode .card-custom {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .logo-text {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .lock-icon-circle {
+    border-color: #555 !important;
+}
+
+body.dark-mode .lock-icon-circle i {
+    color: #e0e0e0 !important;
+}
+
+/* === VERIFY EMAIL PAGE === */
+body.dark-mode .verify-container {
+    background-color: #121212;
+}
+
+/* === ADMIN PAGE SPECIFIC === */
+body.dark-mode .admin-container {
+    background-color: transparent;
+}
+
+body.dark-mode .admin-stats-card {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .admin-stats-card .card-body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .admin-sidebar {
+    background: #1e1e1e !important;
+    border-color: #333;
+}
+
+body.dark-mode .admin-sidebar .nav-link {
+    color: #aaa !important;
+}
+
+body.dark-mode .admin-sidebar .nav-link.active,
+body.dark-mode .admin-sidebar .nav-link:hover {
+    color: #fff !important;
+    background-color: rgba(255,255,255,0.1) !important;
+}
+
+body.dark-mode .admin-sidebar .text-muted {
+    color: #888 !important;
+}
+
+body.dark-mode .admin-submenu {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+body.dark-mode .admin-submenu .nav-link {
+    color: #aaa !important;
+}
+
+body.dark-mode .admin-submenu .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+body.dark-mode .admin-submenu .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+}
+
+body.dark-mode .post-preview-img {
+    border: 1px solid #333;
+}
+
+body.dark-mode .comment-text {
+    color: #e0e0e0;
+}
+
+/* === SEARCH SUGGESTIONS === */
+body.dark-mode .mention-autocomplete {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0;
+}
+
+body.dark-mode .mention-item {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .mention-item:hover {
+    background-color: #2a2a2a !important;
+}
+
+/* === IMAGES === */
+body.dark-mode img {
+    opacity: 0.95;
+}
+
+body.dark-mode img:hover {
+    opacity: 1;
+}
+
+/* === CODE BLOCKS === */
+body.dark-mode code {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode pre {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    border-color: #333;
+}
+
+/* === LIST GROUP === */
+body.dark-mode .list-group-item {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .list-group-item:hover {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .list-group-item.active {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+/* === PROGRESS BAR === */
+body.dark-mode .progress {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .progress-bar {
+    background-color: #0d6efd;
+}
+
+/* === INPUT GROUP === */
+body.dark-mode .input-group-text {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+/* === CLOSE BUTTON === */
+body.dark-mode .btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+a {
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+}
+
+/* Scrollbar đẹp hơn */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* --- 2. NAVBAR STYLING --- */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px); /* Hiệu ứng mờ đục hiện đại */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Bóng mờ nhẹ dưới navbar */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0.7rem 0;
+}
+
+.nav-link {
+    color: #000 !important;
+    font-size: 1.3rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.nav-link:hover {
+    background-color: #f0f2f5;
+    color: #0d6efd !important; /* Màu xanh khi hover */
+}
+
+.nav-link i.bi-house-door-fill, 
+.nav-link i.bi-chat-right-dots-fill {
+    position: relative;
+    top: 2px;
+}
+
+/* Ô tìm kiếm trên Navbar */
+.navbar input[type="search"] {
+    background-color: #efefef;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 14px;
+    width: 250px;
+    transition: width 0.3s ease;
+}
+.navbar input[type="search"]:focus {
+    background-color: #fff;
+    box-shadow: 0 0 0 1px #dbdbdb;
+    width: 300px; /* Nở rộng khi click vào */
+}
+
+/* Badge thông báo */
+.badge {
+    border: 2px solid #fff; /* Viền trắng giúp tách biệt icon */
+}
+
+/* --- 3. SIDEBAR STYLING --- */
+/* Làm cho Sidebar cố định khi cuộn trang */
+.col-4.mt-4.p-3 {
+    position: sticky;
+    top: 80px; /* Cách top navbar một chút */
+    height: calc(100vh - 90px);
+    overflow-y: auto;
+    /* Ẩn scrollbar của sidebar cho đẹp */
+    scrollbar-width: none; 
+}
+.col-4.mt-4.p-3::-webkit-scrollbar {
+    display: none;
+}
+
+/* Card Profile & Suggestion */
+.card {
+    border: none !important; /* Bỏ viền đen mặc định của bootstrap */
+    border-radius: 12px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); /* Bóng nhẹ tạo chiều sâu */
+    background: #fff;
+    transition: transform 0.2s;
+}
+
+/* Suggestion List */
+.followbtn {
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.followbtn:hover {
+    color: #00376b !important; /* Xanh đậm hơn khi hover */
+}
+
+/* --- 4. WALL POST STYLING (QUAN TRỌNG) --- */
+.col-7.mt-4 .card {
+    margin-bottom: 30px;
+}
+
+.card-header {
+    background-color: #fff !important;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0 !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+}
+
+/* Ảnh Profile trong bài viết */
+.card-header img {
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #dbdbdb;
+    transition: transform 0.2s;
+}
+.card-header img:hover {
+    transform: scale(1.05);
+}
+
+/* Ảnh bài viết */
+.card-img-top {
+    border-radius: 0 !important; /* Ảnh bài viết nên full cạnh */
+    max-height: 600px; /* Giới hạn chiều cao nếu ảnh quá dài */
+    object-fit: contain; /* Giữ tỷ lệ ảnh đẹp */
+    background-color: #f8f8f8;
+}
+
+/* Nút Like, Comment */
+.bi-heart, .bi-chat-left, .bi-heart-fill {
+    font-size: 1.4rem !important;
+    transition: transform 0.1s;
+}
+
+.bi-heart:active, .bi-heart-fill:active {
+    transform: scale(1.2); /* Hiệu ứng nảy khi click */
+}
+
+.like_btn:hover { color: #8e8e8e; }
+.unlike_btn { color: #ed4956; animation: heartBeat 0.3s ease-in-out; }
+
+/* Khu vực Comment */
+.comment-list {
+    max-height: 250px;
+    overflow-y: auto;
+    background-color: #fbfbfb;
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+/* Nested Comments Styling - Phân cách rõ ràng giữa các cấp độ với visual thread lines */
+.comment-item {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+/* Comment gốc - Level 0 */
+.comment-item[data-comment-id] {
+    padding-left: 0;
+    margin-left: 0;
+    background-color: transparent;
+}
+
+/* Thread line - Đường nối giữa các comment */
+.comment-thread-line {
+    position: absolute;
+    left: -20px;
+    top: 40px;
+    width: 20px;
+    height: calc(100% - 20px);
+    border-left: 2px solid #0d6efd;
+    border-bottom: 2px solid #0d6efd;
+    border-bottom-left-radius: 8px;
+}
+
+.comment-thread-line-nested {
+    position: absolute;
+    left: -16px;
+    top: 32px;
+    width: 16px;
+    height: calc(100% - 16px);
+    border-left: 2px solid #6c757d;
+    border-bottom: 2px solid #6c757d;
+    border-bottom-left-radius: 6px;
+}
+
+.comment-thread-line-deep {
+    position: absolute;
+    left: -14px;
+    top: 32px;
+    width: 14px;
+    height: calc(100% - 16px);
+    border-left: 1.5px solid #adb5bd;
+    border-bottom: 1.5px solid #adb5bd;
+    border-bottom-left-radius: 4px;
+}
+
+/* Phân cách giữa comment gốc và replies */
+.comment-replies-level-1 {
+    margin-top: 12px;
+    padding-top: 12px;
+    padding-left: 48px;
+    border-left: 3px solid #0d6efd;
+    margin-left: 16px;
+    position: relative;
+}
+
+.comment-replies-level-1::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: -12px;
+    width: 3px;
+    height: 24px;
+    background-color: #0d6efd;
+}
+
+/* Reply Level 1 - Comment trả lời comment gốc */
+.comment-reply-wrapper.comment-level-1 {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    padding-left: 16px;
+    background: linear-gradient(to right, #f0f4ff 0%, #ffffff 60%);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(13, 110, 253, 0.1);
+    border: 1px solid #cfe2ff;
+}
+
+.comment-reply-wrapper.comment-level-1::after {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 16px;
+    width: 16px;
+    height: 2px;
+    background-color: #0d6efd;
+}
+
+/* Reply containers cho level 2, 3+ */
+.comment-replies-level-2 {
+    margin-top: 12px;
+    padding-top: 12px;
+    padding-left: 36px;
+    border-left: 2px solid #6c757d;
+    margin-left: 16px;
+    position: relative;
+}
+
+.comment-replies-level-2::before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: -12px;
+    width: 2px;
+    height: 24px;
+    background-color: #6c757d;
+}
+
+.comment-replies-level-3 {
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-left: 28px;
+    border-left: 1.5px solid #adb5bd;
+    margin-left: 12px;
+    position: relative;
+}
+
+.comment-replies-level-3::before {
+    content: '';
+    position: absolute;
+    left: -1.5px;
+    top: -10px;
+    width: 1.5px;
+    height: 20px;
+    background-color: #adb5bd;
+}
+
+/* Nested Reply Level 2 - Reply của reply */
+.comment-nested-reply.comment-level-2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    padding-left: 14px;
+    background: linear-gradient(to right, #f5f5f5 0%, #ffffff 60%);
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(108, 117, 125, 0.1);
+    border: 1px solid #dee2e6;
+}
+
+.comment-nested-reply.comment-level-2::after {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 12px;
+    width: 12px;
+    height: 2px;
+    background-color: #6c757d;
+}
+
+/* Nested Reply Level 3+ - Deep nested */
+.comment-nested-reply.comment-level-3 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    padding-left: 12px;
+    background: linear-gradient(to right, #f8f9fa 0%, #ffffff 60%);
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(173, 181, 189, 0.08);
+    border: 1px solid #e9ecef;
+}
+
+.comment-nested-reply.comment-level-3::after {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 10px;
+    width: 10px;
+    height: 1.5px;
+    background-color: #adb5bd;
+}
+
+/* Reply container styling */
+.reply-container-popup-0,
+[class^="reply-container-popup-"],
+[class*=" reply-container-popup-"] {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #e9ecef;
+    margin-left: 52px;
+}
+
+/* Phân cách visual cho các cấp độ - reset cho nested */
+.comment-item > .comment-item,
+.comment-reply-wrapper > .comment-reply-wrapper,
+.comment-nested-reply > .comment-nested-reply {
+    border-left: none !important;
+    margin-left: 0 !important;
+}
+
+/* Background colors và borders khác nhau cho mỗi level */
+.comment-item .comment-content-wrapper,
+.comment-item .bg-light {
+    background-color: #ffffff !important;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+}
+
+.comment-reply-wrapper .comment-content-wrapper,
+.comment-reply-wrapper .bg-light {
+    background-color: #ffffff !important;
+    border: none !important;
+    border-radius: 0;
+}
+
+.comment-nested-reply .comment-content-wrapper,
+.comment-nested-reply .bg-light {
+    background-color: #ffffff !important;
+    border: none !important;
+    border-radius: 0;
+}
+
+/* Avatar sizing theo level */
+.comment-item img {
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.comment-level-1 img {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+.comment-level-2 img,
+.comment-level-3 img {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+/* Smooth transitions */
+.comment-item,
+.comment-reply-wrapper,
+.comment-nested-reply {
+    transition: all 0.2s ease;
+}
+
+.comment-item:hover {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.comment-reply-wrapper.comment-level-1:hover {
+    background: linear-gradient(to right, #e7f1ff 0%, #ffffff 60%) !important;
+    box-shadow: 0 2px 6px rgba(13, 110, 253, 0.15);
+    border-color: #b6d4fe;
+}
+
+.comment-nested-reply.comment-level-2:hover {
+    background: linear-gradient(to right, #ebebeb 0%, #ffffff 60%) !important;
+    box-shadow: 0 2px 5px rgba(108, 117, 125, 0.15);
+    border-color: #ced4da;
+}
+
+.comment-nested-reply.comment-level-3:hover {
+    background: linear-gradient(to right, #f1f3f5 0%, #ffffff 60%) !important;
+    box-shadow: 0 1px 3px rgba(173, 181, 189, 0.12);
+    border-color: #dee2e6;
+}
+
+/* Phân cách rõ ràng giữa các comment */
+.comment-list .comment-item + .comment-item {
+    margin-top: 16px;
+    padding-top: 12px;
+}
+
+/* Visual indicator - Badge cho level */
+.comment-level-1::before {
+    content: '↳';
+    position: absolute;
+    left: -24px;
+    top: 12px;
+    color: #0d6efd;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.comment-level-2::before {
+    content: '↳';
+    position: absolute;
+    left: -20px;
+    top: 10px;
+    color: #6c757d;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.comment-level-3::before {
+    content: '↳';
+    position: absolute;
+    left: -18px;
+    top: 8px;
+    color: #adb5bd;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Modal comments styling - Áp dụng cùng styling */
+#popup_comment_list .comment-item {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+#popup_comment_list .comment-replies-level-1 {
+    margin-left: 16px;
+    padding-left: 48px;
+    border-left: 3px solid #0d6efd;
+}
+
+#popup_comment_list .comment-reply-wrapper.comment-level-1 {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    border-left: none;
+}
+
+#popup_comment_list .comment-replies-level-2 {
+    margin-left: 16px;
+    padding-left: 36px;
+    border-left: 2px solid #6c757d;
+}
+
+#popup_comment_list .comment-nested-reply.comment-level-2,
+#popup_comment_list .comment-nested-reply.comment-level-3 {
+    margin-left: 0;
+    border-left: none;
+}
+
+/* Đảm bảo thread lines không bị che khuất */
+.comment-reply-wrapper,
+.comment-nested-reply {
+    position: relative;
+    z-index: 1;
+}
+
+.comment-thread-line,
+.comment-thread-line-nested,
+.comment-thread-line-deep {
+    z-index: 0;
+}
+
+/* === POST PREVIEW STYLING === */
+#post_img_preview_container {
+    position: relative;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+#post_img_preview {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#remove_preview_btn {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+#remove_preview_btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* File input styling */
+#select_post_img {
+    cursor: pointer;
+}
+
+#select_post_img:hover {
+    border-color: #0d6efd;
+}
+
+#select_post_img::-webkit-file-upload-button {
+    background-color: #0d6efd;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#select_post_img::-webkit-file-upload-button:hover {
+    background-color: #0b5ed7;
+}
+
+.comment-input {
+    background: transparent;
+    font-size: 14px;
+}
+.comment-input:focus {
+    box-shadow: none;
+    border-bottom: 1px solid #dbdbdb !important;
+}
+
+.add-comment-btn {
+    font-weight: 600;
+    color: #0095f6;
+    background: none;
+    border: none;
+}
+.add-comment-btn:hover {
+    color: #00376b;
+    background: none;
+}
+
+/* --- 5. MODAL STYLING --- */
+.modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.modal-header {
+    border-bottom: 1px solid #efefef;
+}
+.modal-title {
+    font-weight: 700;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+}
+
+/* --- 6. ANIMATIONS --- */
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive cho Mobile */
+@media (max-width: 992px) {
+    .container.col-9 {
+        width: 100% !important; /* Full màn hình trên mobile */
+        padding: 0;
+    }
+    .col-4 {
+        display: none; /* Ẩn sidebar trên mobile */
+    }
+    .col-7 {
+        width: 100% !important;
+        margin-top: 10px !important;
+    }
+    .navbar input[type="search"] {
+        width: 150px; /* Thu nhỏ ô tìm kiếm */
+    }
+}

@@ -48,24 +48,24 @@ $user = $_SESSION['userdata']; // Người đang đăng nhập (là mình)
 
                 <div class="d-flex gap-2 align-items-center my-3">
                     <button class="btn btn-sm btn-primary">
-                        <i class="bi bi-file-post-fill"></i> <?= count($profile_post) ?> Posts
+                        <i class="bi bi-file-post-fill"></i> <?= count($profile_post) ?> bài viết
                     </button>
 
                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#followersModal">
-                        <i class="bi bi-people-fill"></i> <?= count($profile_followers) ?> Followers
+                        <i class="bi bi-people-fill"></i> <span id="follower_count"><?= count($profile_followers) ?></span> người theo dõi
                     </button>
 
                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#followingModal">
-                        <i class="bi bi-person-fill"></i> <?= count($profile_following) ?> Following
+                        <i class="bi bi-person-fill"></i> <?= count($profile_following) ?> đang theo dõi
                     </button>
                 </div>
 
                 <?php if ($user['id'] != $profile['id']): ?>
                     <div class="d-flex gap-2 align-items-center my-1">
                         <?php if (checkFollowStatus($profile['id'])): ?>
-                            <button class="btn btn-sm btn-danger unfollowbtn" data-user-id='<?= $profile['id'] ?>'>Unfollow</button>
+                            <button class="btn btn-sm btn-secondary unfollowbtn" data-user-id='<?= $profile['id'] ?>'>Đang theo dõi</button>
                         <?php else: ?>
-                            <button class="btn btn-sm btn-primary followbtn" data-user-id='<?= $profile['id'] ?>'>Follow</button>
+                            <button class="btn btn-sm btn-primary followbtn" data-user-id='<?= $profile['id'] ?>'>Theo dõi</button>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
@@ -97,17 +97,15 @@ $user = $_SESSION['userdata']; // Người đang đăng nhập (là mình)
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Followers</h5>
+                <h5 class="modal-title">Người theo dõi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <?php foreach ($profile_followers as $f):
-                    $f_user = getUser($f['follower_id']); // Lấy thông tin người follow
+                    $f_user = getUser($f['follower_id']); 
                     if (!$f_user) continue;
-
-                    // Logic nút bấm: Mình (user đang login) đã follow người này chưa?
                     $followed_by_me = checkFollowStatus($f['follower_id']);
-                    $is_me = ($user['id'] == $f['follower_id']); // Có phải là chính mình không?
+                    $is_me = ($user['id'] == $f['follower_id']); 
                 ?>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex align-items-center">
@@ -121,18 +119,16 @@ $user = $_SESSION['userdata']; // Người đang đăng nhập (là mình)
                         </div>
 
                         <div>
-                            <?php if (!$is_me): // Không hiện nút nếu là chính mình 
-                            ?>
+                            <?php if (!$is_me): ?>
                                 <?php if ($followed_by_me): ?>
-                                    <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $f_user['id'] ?>">Unfollow</button>
+                                    <button class="btn btn-sm btn-secondary unfollowbtn" data-user-id="<?= $f_user['id'] ?>">Đang theo dõi</button>
                                 <?php else: ?>
-                                    <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $f_user['id'] ?>">Follow</button>
+                                    <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $f_user['id'] ?>">Theo dõi</button>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
-
                 <?php if (count($profile_followers) < 1) echo "<p class='text-center text-muted'>Chưa có người theo dõi.</p>"; ?>
             </div>
         </div>
@@ -143,15 +139,13 @@ $user = $_SESSION['userdata']; // Người đang đăng nhập (là mình)
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Following</h5>
+                <h5 class="modal-title">Đang theo dõi</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <?php foreach ($profile_following as $f):
-                    $f_user = getUser($f['user_id']); // Lấy thông tin người BỊ follow
+                    $f_user = getUser($f['user_id']); 
                     if (!$f_user) continue;
-
-                    // Logic nút bấm: Mình (user đang login) đã follow người này chưa?
                     $followed_by_me = checkFollowStatus($f['user_id']);
                     $is_me = ($user['id'] == $f['user_id']);
                 ?>
@@ -169,17 +163,76 @@ $user = $_SESSION['userdata']; // Người đang đăng nhập (là mình)
                         <div>
                             <?php if (!$is_me): ?>
                                 <?php if ($followed_by_me): ?>
-                                    <button class="btn btn-sm btn-danger unfollowbtn" data-user-id="<?= $f_user['id'] ?>">Unfollow</button>
+                                    <button class="btn btn-sm btn-secondary unfollowbtn" data-user-id="<?= $f_user['id'] ?>">Đang theo dõi</button>
                                 <?php else: ?>
-                                    <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $f_user['id'] ?>">Follow</button>
+                                    <button class="btn btn-sm btn-primary followbtn" data-user-id="<?= $f_user['id'] ?>">Theo dõi</button>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
-
                 <?php if (count($profile_following) < 1) echo "<p class='text-center text-muted'>Chưa theo dõi ai.</p>"; ?>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    
+    // --- 1. XỬ LÝ NÚT FOLLOW (Optimistic UI - Cập nhật ngay lập tức) ---
+    $(document).on('click', '.followbtn', function() {
+        var user_id = $(this).data('user-id');
+        var btn = $(this);
+
+        // Đổi giao diện NGAY LẬP TỨC (Giống Instagram)
+        // Từ nút Xanh (Follow) -> Nút Xám (Following)
+        btn.removeClass('followbtn btn-primary')
+           .addClass('unfollowbtn btn-secondary')
+           .text('Following');
+
+        // Gửi Ajax ngầm
+        $.ajax({
+            url: 'assets/php/ajax.php?follow=1',
+            method: 'POST',
+            data: { user_id: user_id },
+            success: function(resp){
+                // Nếu đây là trang profile của người mình vừa follow -> Tăng số follow lên 1
+                // Chỉ áp dụng nếu nút bấm nằm ở phần header (không phải trong modal)
+                if(btn.closest('.col-8').length > 0){ 
+                   var count = $('#follower_count');
+                   count.text(parseInt(count.text()) + 1);
+                }
+            }
+        });
+    });
+
+    // --- 2. XỬ LÝ NÚT UNFOLLOW ---
+    $(document).on('click', '.unfollowbtn', function() {
+        var user_id = $(this).data('user-id');
+        var btn = $(this);
+
+        // Đổi giao diện NGAY LẬP TỨC
+        // Từ nút Xám (Following) -> Nút Xanh (Follow)
+        btn.removeClass('unfollowbtn btn-secondary')
+           .addClass('followbtn btn-primary')
+           .text('Follow');
+
+        // Gửi Ajax ngầm
+        $.ajax({
+            url: 'assets/php/ajax.php?unfollow=1',
+            method: 'POST',
+            data: { user_id: user_id },
+            success: function(resp){
+                // Nếu đây là trang profile của người mình vừa unfollow -> Giảm số follow đi 1
+                if(btn.closest('.col-8').length > 0){
+                   var count = $('#follower_count');
+                   count.text(parseInt(count.text()) - 1);
+                }
+            }
+        });
+    });
+
+});
+</script>

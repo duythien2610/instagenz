@@ -138,6 +138,7 @@ function checkUser($login_data){
     $user = mysqli_fetch_assoc($run);
 
     $data['user'] = $user;
+    //'user'   => [ 'id'=>1, 'username'=>'admin', ... ], // Thông tin user tìm được
     $data['status'] = false;
 
     if($user){
@@ -201,11 +202,39 @@ function updateUserProfile($data, $imagedata){
     $username = mysqli_real_escape_string($db, $data['username']);
     $password = mysqli_real_escape_string($db, $data['password']);
 
-    if($imagedata['name']){
+    if(!empty($imagedata['name'])){
+        // Kiểm tra lỗi upload từ PHP trước
+        if ($imagedata['error'] !== UPLOAD_ERR_OK) {
+            $_SESSION['error'] = [
+                'field' => 'profile_pic',
+                'msg'   => 'Upload ảnh lỗi (file quá lớn hoặc không hợp lệ). Thử lại với ảnh nhỏ hơn.'
+            ];
+            return false;
+        }
+
         $image_name = time() . '_' . $imagedata['name'];
-        move_uploaded_file($imagedata['tmp_name'], 'assets/images/profile/'.$image_name);
-        $profile_pic = $image_name;
-    }else{
+
+        // Đường dẫn hệ thống file tuyệt đối tới thư mục ảnh profile
+        $upload_dir = __DIR__ . '/../assets/images/profile/';
+
+        // Đảm bảo thư mục tồn tại
+        if (!is_dir($upload_dir)) {
+            @mkdir($upload_dir, 0775, true);
+        }
+
+        // Thực hiện lưu file upload
+        if (move_uploaded_file($imagedata['tmp_name'], $upload_dir . $image_name)) {
+            $profile_pic = $image_name;
+        } else {
+            // Lưu log để debug trên server
+            error_log('Upload avatar failed for user ID '.$_SESSION['userdata']['id'].' to path '.$upload_dir.$image_name);
+            $_SESSION['error'] = [
+                'field' => 'profile_pic',
+                'msg'   => 'Không lưu được file ảnh (kiểm tra quyền thư mục assets/images/profile).'
+            ];
+            return false;
+        }
+    } else {
         $profile_pic = $_SESSION['userdata']['profile_pic'];
     }
 
@@ -237,12 +266,26 @@ function createPost($text, $image){
     global $db;
     $user_id = $_SESSION['userdata']['id'];
     $post_text = mysqli_real_escape_string($db, $text);
-    $post_img ='';
-    if($image['name']){
+    $post_img = '';
+
+    // Xử lý upload ảnh (nếu có)
+    if (!empty($image['name'])) {
         $image_name = time() . '_' . $image['name'];
-        move_uploaded_file($image['tmp_name'], 'assets/images/posts/'.$image_name);
-        $post_img = $image_name;
+
+        // Thư mục upload (đường dẫn hệ thống file tuyệt đối)
+        $upload_dir = __DIR__ . '/../assets/images/posts/';
+
+        // Đảm bảo thư mục tồn tại
+        if (!is_dir($upload_dir)) {
+            @mkdir($upload_dir, 0775, true);
+        }
+
+        // Lưu file, chỉ khi thành công mới gán vào DB
+        if (move_uploaded_file($image['tmp_name'], $upload_dir . $image_name)) {
+            $post_img = $image_name;
+        }
     }
+
     $query = "INSERT INTO posts(user_id, post_text, post_img) VALUES($user_id, '$post_text', '$post_img')";
     return mysqli_query($db, $query);
 }
@@ -261,6 +304,9 @@ function getPosts(){
 // 2. Lấy bài viết của một user cụ thể
 function getPostById($user_id){
     global $db;
+    if(empty($user_id)){
+        return array(); // Trả về mảng rỗng nếu không có ID, tránh lỗi SQL
+    }
     $query = "SELECT * FROM posts WHERE user_id = $user_id ORDER BY id DESC";
     $run = mysqli_query($db, $query);
     return mysqli_fetch_all($run, MYSQLI_ASSOC);
@@ -298,28 +344,83 @@ function getLikes($post_id){
     return mysqli_fetch_all($run, MYSQLI_ASSOC);
 }
 
-//add Comment
-function addComment($post_id, $comment){
+//add Comment - Hỗ trợ parent_id cho bình luận lồng nhau
+function addComment($post_id, $comment, $parent_id = 0, $mentioned_user_id = 0){
     global $db;
     $comment_text = mysqli_real_escape_string($db, $comment);
     $user_id = $_SESSION['userdata']['id'];
+    $parent_id = (int)$parent_id;
+    $mentioned_user_id = (int)$mentioned_user_id;
 
-    $query = "INSERT INTO comments(post_id, user_id, comment) VALUES($post_id, $user_id, '$comment_text')";
-    return mysqli_query($db, $query);
+    // Kiểm tra xem cột parent_id có tồn tại không
+    $check_column = mysqli_query($db, "SHOW COLUMNS FROM comments LIKE 'parent_id'");
+    $has_parent_id = ($check_column && mysqli_num_rows($check_column) > 0);
+    
+    if ($has_parent_id) {
+        // Có cột parent_id, insert với parent_id
+        $query = "INSERT INTO comments(post_id, user_id, comment, parent_id) VALUES($post_id, $user_id, '$comment_text', $parent_id)";
+    } else {
+        // Chưa có cột parent_id, insert không có parent_id (chỉ hỗ trợ comment gốc)
+        if ($parent_id > 0) {
+            // Nếu muốn reply nhưng chưa có cột, vẫn insert như comment gốc
+            // (tính năng nested comments sẽ không hoạt động cho đến khi thêm cột)
+        }
+        $query = "INSERT INTO comments(post_id, user_id, comment) VALUES($post_id, $user_id, '$comment_text')";
+    }
+    
+    $result = mysqli_query($db, $query);
+    
+    if ($result && $mentioned_user_id > 0) {
+        // Gửi thông báo cho người được mention
+        sendNotification($user_id, $mentioned_user_id, $post_id, 'đã nhắc đến bạn trong bình luận.');
+    }
+    
+    return $result;
 }
 
-function getComments($post_id){
+function getComments($post_id, $parent_id = 0){
     global $db;
-    $query = "SELECT * FROM comments WHERE post_id = $post_id ORDER BY id ASC"; // ASC để bình luận cũ hiện trên, mới hiện dưới
+    $parent_id = (int)$parent_id;
+    
+    // Kiểm tra xem cột parent_id có tồn tại không
+    $check_column = mysqli_query($db, "SHOW COLUMNS FROM comments LIKE 'parent_id'");
+    $has_parent_id = ($check_column && mysqli_num_rows($check_column) > 0);
+    
+    // Nếu parent_id = 0, lấy tất cả comments gốc (không có parent)
+    if ($parent_id == 0) {
+        if ($has_parent_id) {
+            // Có cột parent_id, lấy chỉ comments gốc
+            $query = "SELECT * FROM comments WHERE post_id = $post_id AND (parent_id = 0 OR parent_id IS NULL) ORDER BY id ASC";
+        } else {
+            // Chưa có cột parent_id, lấy tất cả comments (coi như đều là gốc)
+            $query = "SELECT * FROM comments WHERE post_id = $post_id ORDER BY id ASC";
+        }
+    } else {
+        if ($has_parent_id) {
+            // Lấy replies của một comment cụ thể
+            $query = "SELECT * FROM comments WHERE post_id = $post_id AND parent_id = $parent_id ORDER BY id ASC";
+        } else {
+            // Chưa có cột parent_id, không có replies
+            return array();
+        }
+    }
+    
     $run = mysqli_query($db, $query);
+    if (!$run) return array();
     return mysqli_fetch_all($run, MYSQLI_ASSOC);
 }
 
 function getFollowers($user_id){
     global $db;
+    // Kiểm tra nếu ID rỗng thì trả về mảng rỗng ngay, không chạy SQL
+    if(empty($user_id)){
+        return array();
+    }
     // Lấy tất cả dòng mà user_id là mình (tức là người ta đang follow mình)
     $query = "SELECT * FROM follow_list WHERE user_id = $user_id"; 
     $run = mysqli_query($db, $query);
+    
+    if(!$run) return array(); // Nếu chưa tạo bảng hoặc lỗi SQL thì trả về mảng rỗng
     return mysqli_fetch_all($run, MYSQLI_ASSOC);
 }
 
@@ -328,6 +429,13 @@ function getFollowing($user_id){
     global $db;
     $query = "SELECT * FROM follow_list WHERE follower_id = $user_id";
     $run = mysqli_query($db, $query);
+    
+    if (!$run) {
+        // Nếu query lỗi (do chưa có bảng, sai SQL...), trả về mảng rỗng để web không sập
+        return array(); 
+    }
+    // ----------------------------------
+
     return mysqli_fetch_all($run, MYSQLI_ASSOC);
 }
 

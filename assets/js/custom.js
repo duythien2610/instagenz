@@ -1,9 +1,12 @@
+// Preview image khi chọn file trong form đăng bài
 var input_post = document.querySelector("#select_post_img");
 if (input_post) {
     input_post.addEventListener("change", function() {
-        previewImage(this, "#post_img_preview");
+        previewPostImage(this);
     });
 }
+
+// Preview image khi chọn file trong form profile
 var input_profile = document.querySelector("#formFile");
 if (input_profile) {
     input_profile.addEventListener("change", function() {
@@ -11,8 +14,82 @@ if (input_profile) {
     });
 }
 
+// Hàm preview image cho post
+function previewPostImage(input) {
+    var fileObject = input.files[0];
+    
+    if (!fileObject) {
+        // Nếu không có file, ẩn preview
+        document.getElementById('post_img_preview_container').style.display = 'none';
+        return;
+    }
+    
+    // Kiểm tra file có phải là image không
+    if (!fileObject.type.match('image.*')) {
+        alert('Vui lòng chọn file hình ảnh!');
+        input.value = '';
+        return;
+    }
+    
+    // Kiểm tra kích thước file (max 10MB)
+    if (fileObject.size > 10 * 1024 * 1024) {
+        alert('File quá lớn! Vui lòng chọn file nhỏ hơn 10MB.');
+        input.value = '';
+        return;
+    }
+    
+    var fileReader = new FileReader();
+
+    fileReader.readAsDataURL(fileObject);
+
+    fileReader.onload = function() {
+        var result = fileReader.result;
+        var previewContainer = document.getElementById('post_img_preview_container');
+        var previewImg = document.getElementById('post_img_preview');
+
+        previewImg.setAttribute("src", result);
+        previewContainer.style.display = 'block';
+        
+        // Scroll đến preview để user thấy ngay
+        previewContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    
+    fileReader.onerror = function() {
+        alert('Lỗi khi đọc file! Vui lòng thử lại.');
+        input.value = '';
+    }
+}
+
+// Xóa preview image
+$(document).on('click', '#remove_preview_btn', function() {
+    var input = document.getElementById('select_post_img');
+    if (input) {
+        input.value = '';
+    }
+    document.getElementById('post_img_preview_container').style.display = 'none';
+    document.getElementById('post_img_preview').setAttribute('src', '');
+});
+
+// Reset form khi đóng modal
+$('#addpost').on('hidden.bs.modal', function () {
+    // Reset form
+    var form = document.getElementById('add_post_form');
+    if (form) {
+        form.reset();
+    }
+    // Ẩn preview
+    document.getElementById('post_img_preview_container').style.display = 'none';
+    document.getElementById('post_img_preview').setAttribute('src', '');
+});
+
+// Hàm preview image chung (cho profile, etc.)
 function previewImage(input, img_selector) {
     var fileObject = input.files[0];
+    
+    if (!fileObject) {
+        return;
+    }
+    
     var fileReader = new FileReader();
 
     fileReader.readAsDataURL(fileObject);
@@ -21,8 +98,10 @@ function previewImage(input, img_selector) {
         var result = fileReader.result;
         var img = document.querySelector(img_selector);
 
-        img.setAttribute("src", result);
-        img.style.display = "block";
+        if (img) {
+            img.setAttribute("src", result);
+            img.style.display = "block";
+        }
     }
 }
 $(".add-comment").click(function(){
@@ -174,6 +253,108 @@ $(document).on('click', '.show_post_modal', function(){
     $('#postViewModal').modal('show');
     $('#popup_post_menu').html(''); 
     $('#popup_post_img').attr('src', '');
+    
+    // Khởi tạo real-time cho modal
+    var modalLastCommentId = 0;
+    var modalRealtimeInterval = null;
+    
+    // Dừng interval cũ nếu có
+    if (window.modalRealtimeInterval) {
+        clearInterval(window.modalRealtimeInterval);
+    }
+    
+    // Hàm cập nhật real-time cho modal
+    function syncModalRealtime() {
+        var currentPostId = $('#popup_like_btn').data('post-id');
+        if (!currentPostId || !$('#postViewModal').hasClass('show')) {
+            if (window.modalRealtimeInterval) {
+                clearInterval(window.modalRealtimeInterval);
+                window.modalRealtimeInterval = null;
+            }
+            return;
+        }
+        
+        $.ajax({
+            url: 'assets/php/ajax.php?get_realtime_updates',
+            method: 'POST',
+            dataType: 'json',
+            data: { 
+                post_ids: [currentPostId],
+                last_comment_ids: {[currentPostId]: modalLastCommentId},
+                last_update_time: 0
+            },
+            success: function(resp){
+                if(resp.status && resp.updates && resp.updates.post_updates && resp.updates.post_updates[currentPostId]){
+                    var update = resp.updates.post_updates[currentPostId];
+                    
+                    // Cập nhật số lượng likes
+                    if (update.likes_count > 0) {
+                        $('#popup_like_count').text(update.likes_count + ' likes');
+                    } else {
+                        $('#popup_like_count').text('Be the first to like this');
+                    }
+                    
+                    // Cập nhật trạng thái like/unlike
+                    if (update.is_liked) {
+                        $('#popup_unlike_btn').show();
+                        $('#popup_like_btn').hide();
+                    } else {
+                        $('#popup_unlike_btn').hide();
+                        $('#popup_like_btn').show();
+                    }
+                    
+                    // Thêm comments mới
+                    if (update.new_comments && update.new_comments.length > 0) {
+                        var $popupCommentList = $('#popup_comment_list');
+                        
+                        $.each(update.new_comments, function(idx, newComment){
+                            var $existingComment = $('[data-comment-id="' + newComment.id + '"]');
+                            if ($existingComment.length == 0) {
+                                // Sử dụng html_popup cho modal
+                                var htmlToAdd = newComment.html_popup || newComment.html;
+                                
+                                if (newComment.parent_id > 0) {
+                                    // Đây là reply - thêm vào container reply
+                                    var $replyContainer = $('.reply-container-popup-' + newComment.parent_id);
+                                    if ($replyContainer.length > 0) {
+                                        $replyContainer.append(htmlToAdd);
+                                    } else {
+                                        // Nếu container chưa có, tìm và tạo
+                                        var $parentComment = $('.comment-item[data-comment-id="' + newComment.parent_id + '"], .comment-reply-wrapper[data-comment-id="' + newComment.parent_id + '"], .comment-nested-reply[data-comment-id="' + newComment.parent_id + '"]');
+                                        if ($parentComment.length > 0) {
+                                            var containerHtml = '<div class="reply-container-popup-' + newComment.parent_id + ' mt-2 ms-3" style="border-left: 2px solid #e9ecef; padding-left: 12px;"></div>';
+                                            $parentComment.find('.ms-2, .flex-grow-1').last().append(containerHtml);
+                                            $('.reply-container-popup-' + newComment.parent_id).append(htmlToAdd);
+                                        } else {
+                                            // Fallback: thêm vào comment list
+                                            $popupCommentList.append(htmlToAdd);
+                                        }
+                                    }
+                                } else {
+                                    // Đây là comment gốc - thêm vào comment list
+                                    $popupCommentList.append(htmlToAdd);
+                                }
+                                
+                                // Scroll đến comment mới
+                                setTimeout(function() {
+                                    var $popupContainer = $('#popup_comment_list_container');
+                                    if ($popupContainer.length > 0) {
+                                        $popupContainer.scrollTop($popupContainer[0].scrollHeight);
+                                    }
+                                }, 100);
+                            }
+                        });
+                        
+                        // Cập nhật last comment id
+                        if (update.last_comment_id > modalLastCommentId) {
+                            modalLastCommentId = update.last_comment_id;
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
     $.ajax({
         url:'assets/php/ajax.php?get_post_view',
         method:'post',
@@ -189,6 +370,9 @@ $(document).on('click', '.show_post_modal', function(){
                 $('#popup_caption').text(response.post_text);
                 $('#popup_posted_time').text(response.created_at);
                 $('#popup_comment_list').html(response.comments_html);
+                // Reset comment input
+                $('#popup_comment_input').data('parent-id', 0);
+                $('#popup_add_comment_btn').data('parent-id', 0);
                 if(response.like_count > 0){
                     $('#popup_like_count').text(response.like_count + ' likes');
                 } else {
@@ -201,6 +385,13 @@ $(document).on('click', '.show_post_modal', function(){
                     $('#popup_unlike_btn').hide();
                     $('#popup_like_btn').show();
                 }
+                
+                // Khởi tạo modalLastCommentId từ comments hiện có
+                var $lastComment = $('#popup_comment_list .comment-item, #popup_comment_list .comment-reply-wrapper, #popup_comment_list .comment-nested-reply').last();
+                if ($lastComment.length > 0) {
+                    modalLastCommentId = parseInt($lastComment.data('comment-id')) || 0;
+                }
+                
                 var menu_html = '';
                 
                 if(response.is_own_post){
@@ -239,37 +430,215 @@ $(document).on('click', '.show_post_modal', function(){
                     `;
                 }
                 $('#popup_post_menu').html(menu_html);
+                
+                // Bắt đầu real-time updates cho modal (mỗi 2 giây)
+                if (window.modalRealtimeInterval) {
+                    clearInterval(window.modalRealtimeInterval);
+                }
+                window.modalLastCommentId = modalLastCommentId;
+                window.modalRealtimeInterval = setInterval(syncModalRealtime, 2000);
             }
+        }
+    });
+    
+    // Dừng real-time khi đóng modal
+    $('#postViewModal').on('hidden.bs.modal', function () {
+        if (window.modalRealtimeInterval) {
+            clearInterval(window.modalRealtimeInterval);
+            window.modalRealtimeInterval = null;
         }
     });
 });
 $('#popup_add_comment_btn').click(function(){
-    var post_id = $(this).data('postId');
-    var comment_text = $('#popup_comment_input').val();
+    var post_id = $('#popup_like_btn').data('post-id');
+    var parent_id = $(this).data('parent-id') || 0;
+    var comment_text = $('#popup_comment_input').val().trim();
+    var mentioned_user_id = $('#popup_comment_input').data('mentioned-user-id') || 0;
     var button = this;
 
     if(comment_text == '') return;
 
     $(button).attr('disabled', true);
+    $('#popup_comment_input').attr('disabled', true);
 
     $.ajax({
         url: 'assets/php/ajax.php?addcomment',
         method: 'post',
         dataType: 'json',
-        data: {post_id: post_id, comment: comment_text},
+        data: {
+            post_id: post_id, 
+            comment: comment_text,
+            parent_id: parent_id,
+            mentioned_user_id: mentioned_user_id
+        },
         success: function(response){
             if(response.status){
-                $('#popup_comment_list').append(response.comment);
+                // Xóa reply input container nếu có
+                $('.reply-input-container-popup').remove();
+                
+                if (parent_id > 0) {
+                    // Tìm container reply và thêm vào
+                    var $replyContainer = $('.reply-container-popup-' + parent_id);
+                    
+                    // Nếu container không tồn tại, tìm và tạo mới
+                    if ($replyContainer.length == 0) {
+                        // Tìm element cha (comment-item, comment-reply-wrapper, hoặc comment-nested-reply)
+                        var $parentElement = $('.comment-item[data-comment-id="' + parent_id + '"], .comment-reply-wrapper[data-comment-id="' + parent_id + '"], .comment-nested-reply[data-comment-id="' + parent_id + '"]');
+                        if ($parentElement.length > 0) {
+                            // Tạo container mới
+                            var containerHtml = '<div class="reply-container-popup-' + parent_id + ' mt-2 ms-3" style="border-left: 2px solid #e9ecef; padding-left: 12px;"></div>';
+                            $parentElement.find('.ms-2, .flex-grow-1').last().append(containerHtml);
+                            $replyContainer = $('.reply-container-popup-' + parent_id);
+                        }
+                    }
+                    
+                    if ($replyContainer.length > 0) {
+                        $replyContainer.append(response.comment);
+                    } else {
+                        // Fallback: thêm vào popup_comment_list
+                        $('#popup_comment_list').append(response.comment);
+                    }
+                } else {
+                    // Comment gốc
+                    $('#popup_comment_list').append(response.comment);
+                }
+                
                 $('#popup_comment_input').val('');
+                $('#popup_comment_input').attr('placeholder', 'Add a comment...');
+                $('#popup_comment_input').data('mentioned-user-id', 0);
+                $('#popup_comment_input').data('parent-id', 0);
+                $(button).data('parent-id', 0);
+                $('#popup-mention-autocomplete').hide();
                 $(button).attr('disabled', false);
-                var commentList = document.getElementById('popup_comment_list');
-                commentList.scrollTop = commentList.scrollHeight;
+                $('#popup_comment_input').attr('disabled', false);
+                
+                // Scroll to bottom
+                var commentContainer = document.getElementById('popup_comment_list_container');
+                if (commentContainer) {
+                    setTimeout(function() {
+                        commentContainer.scrollTop = commentContainer.scrollHeight;
+                    }, 100);
+                }
             }else{
                 alert('Lỗi!');
                 $(button).attr('disabled', false);
+                $('#popup_comment_input').attr('disabled', false);
             }
         }
     });
+});
+
+// Xử lý reply trong modal
+$(document).on('click', '.reply-btn-popup', function(e) {
+    e.preventDefault();
+    var comment_id = $(this).data('comment-id');
+    var post_id = $(this).data('post-id');
+    
+    // Ẩn tất cả các reply input khác và reset input chính
+    $('.reply-input-container-popup').remove();
+    $('#popup_comment_input').data('parent-id', 0);
+    $('#popup_add_comment_btn').data('parent-id', 0);
+    
+    // Set parent_id cho input chính
+    $('#popup_comment_input').data('parent-id', comment_id);
+    $('#popup_add_comment_btn').data('parent-id', comment_id);
+    $('#popup_comment_input').attr('placeholder', 'Trả lời...');
+    
+    // Focus vào input chính để user có thể gõ ngay
+    $('#popup_comment_input').focus();
+    
+    // Scroll đến input
+    var commentContainer = document.getElementById('popup_comment_list_container');
+    if (commentContainer) {
+        setTimeout(function() {
+            $('#popup_comment_input')[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    }
+});
+
+// Phím Enter để comment trong modal
+$(document).on('keydown', '#popup_comment_input', function(e) {
+    if(e.which == 13 || e.keyCode == 13) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $btn = $('#popup_add_comment_btn');
+        if ($btn.length > 0 && !$btn.prop('disabled')) {
+            $btn.click();
+        }
+    }
+});
+
+// Hủy reply trong modal
+$(document).on('click', '.cancel-reply-popup', function() {
+    $(this).closest('.reply-input-container-popup').remove();
+    $('#popup_comment_input').data('parent-id', 0);
+    $('#popup_add_comment_btn').data('parent-id', 0);
+});
+
+// Xử lý @mention trong modal
+$('#popup_comment_input').on('input', function() {
+    var $input = $(this);
+    var value = $input.val();
+    var cursorPos = $input[0].selectionStart;
+    var textBeforeCursor = value.substring(0, cursorPos);
+    var atIndex = textBeforeCursor.lastIndexOf('@');
+    
+    if (atIndex !== -1) {
+        var searchTerm = textBeforeCursor.substring(atIndex + 1).trim();
+        if (searchTerm.length > 0 && !/\s/.test(searchTerm)) {
+            clearTimeout(window.mentionTimeout);
+            window.mentionTimeout = setTimeout(function() {
+                $.ajax({
+                    url: 'assets/php/ajax.php?search_following',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: { search: searchTerm },
+                    success: function(response) {
+                        if (response.status && response.users.length > 0) {
+                            var html = '<div class="list-group" style="max-height:200px; overflow-y:auto; background:white; border:1px solid #ddd; border-radius:4px;">';
+                            response.users.forEach(function(user) {
+                                html += '<a href="javascript:void(0);" class="list-group-item list-group-item-action mention-item-popup" data-username="' + user.username + '" data-user-id="' + user.id + '">' +
+                                    '<div class="d-flex align-items-center">' +
+                                    '<img src="assets/images/profile/' + user.profile_pic + '" class="rounded-circle me-2" style="width:30px; height:30px; object-fit:cover">' +
+                                    '<div><strong>' + user.first_name + ' ' + user.last_name + '</strong><br><small>@' + user.username + '</small></div>' +
+                                    '</div></a>';
+                            });
+                            html += '</div>';
+                            $('#popup-mention-autocomplete').html(html).show();
+                        } else {
+                            $('#popup-mention-autocomplete').hide();
+                        }
+                    }
+                });
+            }, 300);
+        } else {
+            $('#popup-mention-autocomplete').hide();
+        }
+    } else {
+        $('#popup-mention-autocomplete').hide();
+    }
+});
+
+// Chọn mention trong modal
+$(document).on('click', '.mention-item-popup', function() {
+    var $input = $('#popup_comment_input');
+    var username = $(this).data('username');
+    var user_id = $(this).data('user-id');
+    var value = $input.val();
+    var cursorPos = $input[0].selectionStart;
+    var textBeforeCursor = value.substring(0, cursorPos);
+    var textAfterCursor = value.substring(cursorPos);
+    var atIndex = textBeforeCursor.lastIndexOf('@');
+    
+    if (atIndex !== -1) {
+        var newValue = textBeforeCursor.substring(0, atIndex) + '@' + username + ' ' + textAfterCursor;
+        $input.val(newValue);
+        $input.data('mentioned-user-id', user_id);
+        $input[0].selectionStart = $input[0].selectionEnd = atIndex + username.length + 2;
+        $input.focus();
+    }
+    
+    $('#popup-mention-autocomplete').hide();
 });
 $(document).on('click', '.followbtn', function(){
     var user_id = $(this).data('userId'); // Lấy ID người cần follow
@@ -285,11 +654,11 @@ $(document).on('click', '.followbtn', function(){
                 button.attr('disabled', false); // Bật lại nút
                 if(button.hasClass('text-primary')){
                     button.removeClass('text-primary followbtn').addClass('text-muted fw-normal');
-                    button.text('Following');
+                    button.text('Đang theo dõi');
                     button.attr('disabled', true); // Sidebar gợi ý thì follow xong khóa nút luôn cho đẹp
                 } 
                 else {
-                    button.text('Unfollow');
+                    button.text('Bỏ theo dõi');
                     button.removeClass('btn-outline-primary followbtn').addClass('btn-danger unfollowbtn');
                 }
             }
@@ -308,7 +677,7 @@ $(document).on('click', '.unfollowbtn', function(){
         success: function(response){
             if(response.status){
                 
-                button.text('Follow');
+                button.text('Theo dõi');
                 button.removeClass('btn-danger unfollowbtn').addClass('btn-outline-primary followbtn');
             }
         }

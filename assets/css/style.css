@@ -1,0 +1,228 @@
+/* --- NỀN VÀ BỐ CỤC CHUNG (GIỐNG INSTAGRAM) --- */
+/* --- KHUNG ĐĂNG NHẬP (CARD) --- */
+.login-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 350px;
+    
+    /* 1. Thay đổi viền: Làm mờ viền đi một chút để không bị cứng */
+    border: 1px solid rgba(0, 0, 0, 0.05); 
+    
+    /* 2. Thêm bóng đổ: */
+    /* 0px (x) 10px (y) 30px (độ nhòe) màu đen độ mờ 10% */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+    
+    border-radius: 8px; /* Bo góc nhiều hơn xíu (8px) để hợp với bóng đổ mềm */
+    padding: 40px 30px;
+    transition: transform 0.3s ease; /* Thêm hiệu ứng mượt nếu sau này muốn hover */
+}
+
+/* --- BOX LINK LOGIN BÊN DƯỚI --- */
+.login-card-footer {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 10px;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    
+    /* Copy y hệt hiệu ứng của login-card để đồng bộ */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; 
+}
+
+/* --- CẬP NHẬT PHẦN BAO NGOÀI --- */
+/* --- SỬA LẠI: CONTAINER ĐĂNG NHẬP/ĐĂNG KÝ --- */
+.login-container {
+    /* Quan trọng: Chiếm toàn bộ chiều cao màn hình để có thể căn giữa */
+    min-height: 100vh; 
+    width: 100%;
+    
+    /* Flexbox để căn giữa nội dung vào chính giữa màn hình */
+    display: flex;
+    flex-direction: column; /* Xếp dọc (Logo -> Form -> Link) */
+    align-items: center;    /* Căn giữa theo chiều ngang */
+    justify-content: center; /* Căn giữa theo chiều dọc */
+    
+    padding: 10px;
+    gap: 10px; /* Khoảng cách giữa các box */
+}
+
+/* Các phần khác giữ nguyên */
+
+/* --- KHUNG ĐĂNG NHẬP (CARD) --- */
+
+.login-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 350px;
+    
+    /* 1. Thay đổi viền: Làm mờ viền đi một chút để không bị cứng */
+    border: 1px solid rgba(0, 0, 0, 0.05); 
+    
+    /* 2. Thêm bóng đổ: */
+    /* 0px (x) 10px (y) 30px (độ nhòe) màu đen độ mờ 10% */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+    
+    border-radius: 8px; /* Bo góc nhiều hơn xíu (8px) để hợp với bóng đổ mềm */
+    padding: 40px 30px;
+    transition: transform 0.3s ease; /* Thêm hiệu ứng mượt nếu sau này muốn hover */
+}
+
+/* --- BOX LINK LOGIN BÊN DƯỚI --- */
+.login-card-footer {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 10px;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    
+    /* Copy y hệt hiệu ứng của login-card để đồng bộ */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; 
+}
+
+/* --- LOGO VÀ TIÊU ĐỀ --- */
+.login-logo {
+    display: block;
+    margin: 0 auto 30px auto;
+    /* Nếu bạn muốn logo to hơn hoặc nhỏ hơn thì chỉnh ở đây */
+}
+
+.title {
+    text-align: center;
+    color: #8e8e8e;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    line-height: 20px;
+}
+
+/* --- INPUT FIELDS --- */
+.form-floating > .form-control {
+    background-color: #fafafa; /* Nền input hơi xám nhẹ */
+    border: 1px solid #dbdbdb;
+    border-radius: 3px; /* Bo góc 3px chuẩn Insta */
+    font-size: 14px; /* Chữ nhỏ gọn */
+    height: 48px; /* Chiều cao chuẩn */
+}
+
+.form-floating > .form-control:focus {
+    background-color: #fff;
+    border-color: #a8a8a8;
+    box-shadow: none; /* Bỏ hiệu ứng glow xanh của Bootstrap */
+}
+
+.form-floating > label {
+    font-size: 12px;
+    color: #8e8e8e;
+    padding-top: 15px; /* Căn chỉnh lại vị trí label cho khớp height mới */
+}
+
+/* --- NÚT ĐĂNG NHẬP (MÀU XANH INSTA) --- */
+.btn-insta {
+    background-color: #0095f6;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 7px 16px;
+    width: 100%;
+    margin-top: 15px;
+    transition: background-color 0.2s;
+}
+
+.btn-insta:hover {
+    background-color: #1877f2; /* Màu đậm hơn khi hover */
+    color: #fff;
+}
+
+/* --- LIÊN KẾT (LINKS) --- */
+.link-secondary {
+    color: #00376b; /* Xanh đậm cho link */
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.link-signup {
+    color: #0095f6;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.divider-text {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: #8e8e8e;
+    font-size: 13px;
+    font-weight: 600;
+}
+.divider-text::before, .divider-text::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dbdbdb;
+}
+.divider-text::before { margin-right: 15px; }
+.divider-text::after { margin-left: 15px; }
+
+/* --- ICON MẮT (GIỮ NGUYÊN LOGIC CŨ) --- */
+.form-floating { position: relative; }
+.eye-toggle {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #8e8e8e;
+    font-size: 14px;
+    z-index: 10;
+}
+
+
+/* --- BỔ SUNG CHO TRANG SIGNUP --- */
+
+/* Tinh chỉnh khoảng cách cho hàng Họ - Tên */
+.name-row {
+    display: flex;
+    gap: 10px; /* Tạo khoảng hở 10px giữa 2 ô */
+}
+
+.name-row .form-floating {
+    flex: 1; /* Mỗi ô chiếm 1 nửa đều nhau */
+}
+
+/* Định dạng lại nút Radio giới tính cho đẹp hơn */
+.gender-group {
+    display: flex;
+    justify-content: center; /* Căn giữa */
+    gap: 20px; /* Khoảng cách giữa các lựa chọn */
+    margin: 15px 0;
+    font-size: 14px;
+    color: #8e8e8e;
+}
+
+.form-check-input:checked {
+    background-color: #0095f6; /* Đổi màu xanh chuẩn Insta khi chọn */
+    border-color: #0095f6;
+}
+
+/* Box riêng cho link login (nằm dưới cùng) */
+.login-card-footer {
+    background-color: #ffffff;
+    border: 1px solid #dbdbdb;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 10px; /* Cách box trên 1 đoạn */
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+}

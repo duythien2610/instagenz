@@ -1,7 +1,7 @@
 <?php
 const DB_HOST = 'localhost';
 const DB_USER = 'root';
-const DB_PASS = '#thiencuimuc#1';
+const DB_PASS = '';
 const DB_NAME = 'project_mini_web';
 
 //Kết nối 

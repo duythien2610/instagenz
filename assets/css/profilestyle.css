@@ -1,0 +1,121 @@
+/* --- Cấu hình chung --- */
+body {
+    background-color: #fafafa !important;
+}
+
+/* --- Container chính --- */
+.profile-wrapper {
+    max-width: 935px !important; /* Chiều rộng chuẩn của Instagram */
+    padding: 0 20px;
+}
+
+/* --- Header Profile --- */
+.profile-header {
+    background-color: transparent !important; /* Bỏ nền trắng của card bootstrap */
+    border: none !important; /* Bỏ viền */
+    box-shadow: none !important; /* Bỏ bóng */
+    margin-bottom: 20px;
+}
+
+/* Avatar to tròn */
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 1px solid #dbdbdb !important;
+    padding: 2px; /* Khoảng cách giữa ảnh và viền */
+}
+
+/* Tên người dùng */
+.profile-name {
+    font-size: 28px;
+    font-weight: 300;
+    color: #262626;
+}
+
+/* --- Các nút thống kê (Posts, Followers) --- */
+/* Biến nút button thành dạng text đơn giản */
+.btn-stat {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 16px;
+    color: #262626;
+    margin-right: 20px;
+}
+
+.btn-stat:hover {
+    color: #262626;
+    text-decoration: none; /* Không gạch chân */
+}
+
+.btn-stat span {
+    font-weight: 600; /* Số lượng đậm hơn chữ */
+}
+
+/* --- Gallery (Lưới ảnh) --- */
+.gallery-item {
+    position: relative;
+    cursor: pointer;
+    background-color: #000; /* Nền đen để làm hiệu ứng hover */
+}
+
+.gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.2s;
+}
+
+/* Hiệu ứng lớp phủ khi di chuột vào ảnh */
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Màu đen mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Mặc định ẩn */
+    transition: opacity 0.2s;
+    pointer-events: none; /* Để click xuyên qua vào ảnh */
+}
+
+.gallery-item:hover .gallery-img {
+    opacity: 0.9; /* Ảnh tối đi chút */
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1; /* Hiện lớp phủ */
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+    }
+    
+    .profile-name {
+        font-size: 20px;
+    }
+
+    .profile-stats {
+        justify-content: space-between;
+        width: 100%;
+        border-top: 1px solid #dbdbdb;
+        padding-top: 15px;
+        gap: 0 !important;
+    }
+
+    .btn-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 14px;
+        margin: 0;
+    }
+}

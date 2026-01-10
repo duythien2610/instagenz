@@ -14,7 +14,7 @@ if(isset($_GET['signup'])){
             $_SESSION['verification_email'] = $_POST['email'];
             //Gửi amil
             sendOTP($_POST['email'], 'Verify account with code', $otp);
-            header('location: index.php?verify_email');
+            header('location: index.php?verify_email'); // tới page xác nhận email
         }else{
             echo"<script>alert('Có lỗi xảy ra !')</script>";
         }
@@ -70,6 +70,7 @@ if(isset($_GET['login'])){
     $check = checkUser($_POST);
     if($check['status']){
         $_SESSION['Auth'] = true;
+        //gán biến session 
         $_SESSION['userdata'] = $check['user'];
         header("location: index.php");
     }else{

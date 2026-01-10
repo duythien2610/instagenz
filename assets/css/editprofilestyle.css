@@ -1,0 +1,99 @@
+/* --- Cấu hình chung --- */
+body {
+    background-color: #fafafa !important; /* Nền xám nhẹ giống Instagram */
+}
+
+/* --- Card chứa form --- */
+.edit-profile-card {
+    border: 1px solid #dbdbdb !important; /* Viền mỏng */
+    box-shadow: 0 0 20px rgba(0,0,0,0.03) !important; /* Đổ bóng rất nhẹ */
+    border-radius: 12px !important; /* Bo góc card */
+    background: #fff;
+}
+
+/* --- Ảnh đại diện --- */
+.profile-img-container {
+    position: relative;
+    display: inline-block;
+}
+
+#profile_img_pre {
+    width: 140px;
+    height: 140px;
+    object-fit: cover; /* Giữ ảnh không bị méo */
+    border: 4px solid #fff; /* Viền trắng quanh ảnh */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Đổ bóng cho ảnh */
+    transition: transform 0.3s ease;
+}
+
+#profile_img_pre:hover {
+    transform: scale(1.02); /* Phóng to nhẹ khi di chuột vào ảnh */
+}
+
+/* --- Nút upload ảnh --- */
+.upload-btn {
+    border-radius: 20px;
+    font-weight: 500;
+    padding: 5px 15px;
+}
+
+/* --- Các ô nhập liệu (Input) --- */
+.form-control {
+    border-radius: 8px !important;
+    border: 1px solid #dbdbdb;
+    padding-top: 1.625rem; /* Để chữ không bị đè lên label */
+    padding-bottom: 0.625rem;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 4px rgba(0, 149, 246, 0.15) !important; /* Hiệu ứng focus xanh nhạt */
+    border-color: #0095f6;
+}
+
+/* Input bị disable (Email, Giới tính) */
+.form-control:disabled, .form-control[readonly] {
+    background-color: #f0f2f5 !important;
+    color: #65676b;
+    border-color: #e4e6eb;
+    cursor: not-allowed;
+}
+
+/* Label trong form-floating */
+.form-floating > label {
+    color: #8e8e8e;
+    font-size: 0.9rem;
+}
+
+/* --- Khu vực giới tính --- */
+.bg-light {
+    background-color: #fafafa !important;
+    border-color: #dbdbdb !important;
+}
+
+.form-check-input:checked {
+    background-color: #0095f6;
+    border-color: #0095f6;
+}
+
+/* --- Nút Lưu thay đổi --- */
+.update-btn {
+    background-color: #0095f6;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    transition: background-color 0.2s;
+}
+
+.update-btn:hover {
+    background-color: #0081d6; /* Đậm hơn khi hover */
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+    .edit-profile-card {
+        padding: 20px !important;
+    }
+}

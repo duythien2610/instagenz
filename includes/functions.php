@@ -128,3 +128,38 @@ function countUnreadNotifications($user_id){
     $run = mysqli_query($db, $sql);
     return mysqli_num_rows($run);
 }
+
+// 1. Hàm đếm tin nhắn chưa đọc (Cho Navbar)
+function countUnreadMessages($user_id) {
+    global $db;
+    
+    // Kiểm tra xem biến $db có tồn tại không
+    if (!$db) {
+        die("Lỗi: Biến kết nối database (\$db) chưa được khởi tạo trong functions.php");
+    }
+
+    $query = "SELECT COUNT(*) as count FROM messages WHERE to_user_id = $user_id AND read_status = 0";
+    $run = mysqli_query($db, $query);
+
+    // Kiểm tra xem câu lệnh SQL có chạy thành công không
+    if (!$run) {
+        die("Lỗi truy vấn SQL: " . mysqli_error($db)); 
+    }
+
+    $result = mysqli_fetch_assoc($run);
+    return $result['count'];
+}
+
+// 2. Hàm lấy danh sách tin nhắn giữa 2 người (Cho Message.php)
+function getMessages($my_id, $other_id) {
+    global $db;
+    // Lấy tin nhắn 2 chiều, sắp xếp cũ nhất -> mới nhất
+    $query = "SELECT * FROM messages 
+              WHERE (from_user_id = $my_id AND to_user_id = $other_id) 
+              OR (from_user_id = $other_id AND to_user_id = $my_id) 
+              ORDER BY created_at ASC";
+    $run = mysqli_query($db, $query);
+    return mysqli_fetch_all($run, MYSQLI_ASSOC);
+}
+
+
